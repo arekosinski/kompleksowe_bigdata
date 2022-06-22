@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/agate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/shell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/sql.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+      pre {
+        margin-bottom: 0;
+      }
+
+      .card-body {
+        padding: 0.5rem 0.5rem;
+      }
+
+      .bash_symbol {
+        user-select: none;
+        -webkit-user-select: none;    
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+    </style>
+
+    <title>Warsztat 03: Hive</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+      </symbol>
+      <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      </symbol>
+      <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </symbol>
+    </svg>
+
+    <div class="container">
+      
+      <div class="row">
+        <div class="col align-self-center">
+          <h1>Warsztat 03</h1>
+          <p class="lead">
+            Ćwiczenia związane z podstawami użytkowania systemu Hive oraz pracą z HiveQL
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col align-self-center">
+          <h2>Hive</h2>
+          <br/>
+        </div>
+      </div>
+
+      <!-- pytanie 0 -->
+      <div class="row mb-4">
+          <div class="col align-self-center">
+          <h5>
+            0. Zaloguj się do Hue. Adres: <code>http://&lt;master-public-dns-name&gt;:8888/</code>
+          </h5>
+          <div class="alert alert-primary d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+            <div>
+                Master Public DNS zmienia sie wraz z uruchomieniem klastra - jest dostępny w konsolie AWS.<br/>
+                W momencie kiedy pierwszy raz uruchamiasz konsole Hue, należy utworzyć użytkownika - utwórz usera o nazwie "hadoop"
+            </div>
+          </div>
+          </div>
+          <hr>
+      </div>
+
+      <!-- pytanie 0a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            0a. Utwórz własną bazę danych za pomocą polecenia:
+          </h5>
+          <pre><code class="language-sql">create database &lt;moja_nazwa_bazy_danych&gt;;</code></pre>
+          <p>Wybierz nowo utworzoną bazę danych po lewej stronie w menu Hue.</p>
+          
+          <div class="alert alert-primary d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+            <div>
+                Przy wykonywaniu zapytań zwróć uwagę czy nad polem tekstowym z poleceniami SQL jest wybrana baza, która została przez Ciebie utworzona<br/>
+                Shortcut do wykonania zapytań: <pre>ctrl+enter</pre>
+
+            </div>
+          </div>
+
+        </div>
+        <hr>
+      </div>
+
+
+      <!-- pytanie 1 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1. Przygotuj tabelę na bazie pan_tadeusz.txt z Warsztat 02<br/>
+            <ul>
+                <li>każda linia niech będzie oddzielnym wierszem</li>
+                <li>dane niech będą przechowywane na HDFS</li>
+            </ul>
+         </h5>
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                    Skopiuj dane z S3 w ten sposób za pomocą CLI:<br/>
+                    <pre><code class="language-shell">$ hdfs dfs -mkdir /user/hadoop/pan_tadeusz
+$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt /user/hadoop/pan_tadeusz</code></pre>
+
+                </div>
+              </div>
+
+          
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-1" aria-expanded="false" aria-controls="w-3-q-1">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-3-q-1">
+            <div class="card card-body">
+                <pre><code class="language-sql">create table pan_tadeusz (line string) stored as textfile location 'hdfs:///user/hadoop/pan_tadeusz';</code></pre>
+                <br/>
+                Alternatywa: Jeśli nie posiadasz dostępu do konsoli SSH, utwórz tabelę w następujący sposób:
+                <pre><code class="language-sql">create table pan_tadeusz (line string) stored as textfile location 's3://kompleksowe-szkolenie-bigdata/warsztat_02/';</code></pre>
+                
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 2 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            2. Ile lini liczy sobie cały zbiór Pan Tadeusz?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-2" aria-expanded="false" aria-controls="w-3-q-2">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-3-q-2">
+            <div class="card card-body">
+              <pre><code class="language-sql">select count(*) from pan_tadeusz; -- 10824</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>  
+
+
+        <!-- pytanie 2a -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    2a. Wykonaj polecenie SQL z punktu 2 za pomocą silnika MapReduce
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-2a" aria-expanded="false" aria-controls="w-3-q-2a">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-2a">
+                <div class="card card-body">
+                    <pre><code class="language-sql">set hive.execution.engine=mr;
+select count(*) from pan_tadeusz;</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>  
+
+
+        <!-- pytanie 3 -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    3. Ile unikalnych wyrazów zbiór posiada ? (przełącz się na silnik TEZ)
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-3" aria-expanded="false" aria-controls="w-3-q-3">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-3">
+                <div class="card card-body">
+                    <pre><code class="language-sql">set hive.execution.engine=tez;
+select count(distinct words) from pan_tadeusz
+LATERAL VIEW explode(split(line, ' ')) splitted_words as words
+where line != ""; 
+-- 27511</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+
+        <!-- pytanie 4 -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    4. Jaki jest najczęściej występujący wyraz ?
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-4" aria-expanded="false" aria-controls="w-3-q-4">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-4">
+                <div class="card card-body">
+                    <pre><code class="language-sql">select * from
+( select words,count(*) as counter from pan_tadeusz
+    LATERAL VIEW explode(split(line, ' ')) splitted_words as words
+    where line != ""
+    group by words
+    order by counter desc limit 10) subselect_aby_usunac_puste_linie
+where words != "";
+-- "w" :)</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+          
+        
+        <!-- pytanie 5 -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    5. Utwórz tabele wedle następującego przykładu:
+                </h5>
+               <pre><code class="language-sql">
+CREATE TABLE `users`(
+    `id` bigint,
+    `reputation` bigint,
+    `creationdate` string,
+    `displayname` string,
+    `lastaccessdate` string,
+    `websiteurl` string,
+    `location` string,
+    `aboutme` string,
+    `views` bigint,
+    `upvotes` bigint,
+    `downvotes` bigint,
+    `profileimageurl` string,
+    `accountid` bigint)
+STORED AS TEXTFILE
+LOCATION 'hdfs:///user/hadoop/users';
+                </code></pre>
+
+            </div>
+            <hr>
+        </div>
+
+
+        
+        <!-- pytanie 5a -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    5a. Załaduj do tabeli dane za pomocą polecenia INSERT INTO SELECT.
+                    <ul>
+                        <li>Wykorzystaj do tego tabele pośrednią opartą na danych z S3.</li>
+                        <li>Lokalizacja danych: <code>s3://kompleksowe-szkolenie-bigdata/stackoverflow/users</code></li>
+                        <li>Użyj definicji ROW FORMAT, STORED AS, OUTPUTFORMAT z punktu 5 podczas tworzenia tabeli tymczasowej</li>
+                    </ul>
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-5a" aria-expanded="false" aria-controls="w-3-q-5a">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-5a">
+                <div class="card card-body">
+                    <pre><code class="language-sql">CREATE TABLE `users_temporary`(
+    `id` bigint,
+    `reputation` bigint,
+    `creationdate` string,
+    `displayname` string,
+    `lastaccessdate` string,
+    `websiteurl` string,
+    `location` string,
+    `aboutme` string,
+    `views` bigint,
+    `upvotes` bigint,
+    `downvotes` bigint,
+    `profileimageurl` string,
+    `accountid` bigint)
+STORED AS TEXTFILE
+LOCATION 's3://kompleksowe-szkolenie-bigdata/stackoverflow/users';
+insert overwrite table users select * from users_temporary ;</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+   
+        <!-- pytanie 6 -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    6. Z jakiego państwa jest najwięcej użytkowników w zbiorze <code>users</code>?
+                </h5>
+                <div class="alert alert-primary d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                    <div>
+                      Wyfiltruj puste pola, nie przejmuj się złożonościa pola location - przyjmujemy jakie jest :)
+                    </div>
+                  </div>
+                
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-6" aria-expanded="false" aria-controls="w-3-q-6">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-6">
+                <div class="card card-body">
+                    <pre><code class="language-sql">select location,count(*) as counter from users
+    where location != ""
+    group by location
+    order by counter desc
+    limit 100;</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+   
+   
+        <!-- pytanie 6a -->
+        <div class="row mb-4">
+        <div class="col align-self-center">
+            <h5>
+                6a. Jak można wykonać wykres z rozkładem państw?
+            </h5>
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                    W miejscu gdzie pojawiają się wyniki, po prawej stronie jest mała ikonka wykresu.
+                </div>
+            </div>
+        </div>
+        <hr>
+        </div>
+
+
+     <!-- pytanie 7 -->
+     <div class="row mb-4">
+        <div class="col align-self-center">
+            <h5>
+                7. Utwórz partycjonowaną tabelę(typu EXTERNAL) na podstawie pierwszej cyfry z pola <code>id</code>.<br/>
+                <ul>
+                    <li>W nowym obiekcie niech będzie kolumna <code>DisplayName</code></li>
+                    <li>Do tabeli zaimportuj dwie partycje z wartościami pola <code>id</code> zaczynającymi sie od "1" oraz od "2"</li>
+                    <li>Struktura obiektu:<br/>
+                        <ul>
+                        <li>displayname string</li>
+                        <li>first_digit string /klucz partycjonowania</li>
+                        </ul>
+                    </li>
+                <li>Użyj partycjonowania dynamicznego</li></ul>
+
+            </h5>
+            <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-7" aria-expanded="false" aria-controls="w-3-q-7">
+                Pokaż odpowiedź
+            </button>
+            </p>
+            <div class="collapse" id="w-3-q-7">
+            <div class="card card-body">
+                <pre><code class="language-sql">set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.exec.max.dynamic.partitions=10000;
+set hive.exec.max.dynamic.partitions.pernode=10000;
+create external table users_displayname
+    (displayname string)
+    partitioned by (first_digit string);
+
+insert into users_displayname partition (first_digit="1")
+    select
+        displayname
+    from users
+    where displayname is not null
+        and id is not null
+        and cast(id as string) like '1%';
+
+insert into users_displayname partition (first_digit="2")
+    select
+        displayname
+    from users
+    where displayname is not null
+        and id is not null
+        and cast(id as string) like '2%';
+                    </code></pre>
+            </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+   
+   
+   
+   
+        <!-- pytanie 7a -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    7a. Sprawdź jakie partycje zostały utworzone w Hive w obiekcie <code>users_displayname</code>. Dodatkowo sprawdz w jaki sposób zostały utworzone katalogi w systemie plików HDFS
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-7a" aria-expanded="false" aria-controls="w-3-q-7a">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-7a">
+                <div class="card card-body">
+                    <pre><code class="language-sql">show partitions users_displayname;</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <!-- pytanie 7b -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    7b. Usuń dowolną partycję z obiektu <code>users_displayname</code>
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-7b" aria-expanded="false" aria-controls="w-3-q-7b">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-7b">
+                <div class="card card-body">
+                    <pre><code class="language-sql">alter table users_displayname drop partition (first_digit="1");
+show partitions users_displayname;
+                        </code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <!-- pytanie 7c -->
+        <div class="row mb-4">
+            <div class="col align-self-center">
+                <h5>
+                    7c. Odtwórz strukturę tabeli <code>users_displayname</code> za pomocą polecenia MSCK REPAIR TABLE.
+                </h5>
+                <p>
+                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-7c" aria-expanded="false" aria-controls="w-3-q-7c">
+                    Pokaż odpowiedź
+                </button>
+                </p>
+                <div class="collapse" id="w-3-q-7c">
+                <div class="card card-body">
+                    <pre><code class="language-sql">msck repair table users_displayname;
+show partitions users_displayname;</code></pre>
+                </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+
+
+
+
+    </div>
+  </body>
+</html>

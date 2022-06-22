@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/agate.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <!-- and it's easy to individually load additional languages -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/shell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/languages/sql.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+      pre {
+        margin-bottom: 0;
+      }
+
+      .card-body {
+        padding: 0.5rem 0.5rem;
+      }
+
+      .bash_symbol {
+        user-select: none;
+        -webkit-user-select: none;    
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+    </style>
+
+    <title>Warsztat 02: HDFS & YARN</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+      </symbol>
+      <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      </symbol>
+      <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </symbol>
+    </svg>
+
+    <div class="container">
+      
+      <div class="row">
+        <div class="col align-self-center">
+          <h1>Warsztat 02</h1>
+          <p class="lead">
+            Ćwiczenia związane z podstawami użytkowania HDFSa oraz YARNa
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col align-self-center">
+          <h2>HDFS</h2>
+          <br/>
+        </div>
+      </div>
+
+      <!-- pytanie 0 -->
+      <div class="row mb-4">
+          <div class="col align-self-center">
+          <h5>
+            0. Zaloguj się na NameNode (maszyna pod adresem Master Public DNS)
+          </h5>
+          <div class="alert alert-primary d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+            <div>
+              Master Public DNS zmienia sie wraz z uruchomieniem klastra. Jest to zarazem adres naszego serwera NameNode oraz ResourceManagera
+              Użyj wybranego przez siebie klienta SSH do połączenia. Jest do znalezienia w konsoli AWS
+            </div>
+          </div>
+          </div>
+          <hr>
+      </div>
+
+      <!-- pytanie 0a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            0a. Gdzie jest przechowywana konfiguracja Hadoopa ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-0a" aria-expanded="false" aria-controls="w-2-q-0a">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-0a">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ ls -al /etc/hadoop/conf</code></pre>
+            </div>
+          </div>
+
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 0b -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            0b. Jaka jest wersja Javy na maszynie ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-0b" aria-expanded="false" aria-controls="w-2-q-0b">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-0b">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ java -version</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 0c -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            0c. Jak sprawdzić wersję Hadoopa ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-0c" aria-expanded="false" aria-controls="w-2-q-0c">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-0c">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hadoop version</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 1 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1. Zapoznaj się z interfejsem WWW NameNode
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-1" aria-expanded="false" aria-controls="w-2-q-1">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-1">
+            <div class="card card-body">
+              Odwiedź adres: <code>http://&lt;master_public_dns&gt;:50070</code><br/>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 1a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1a. Gdzie są informacje o datanodach?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-1a" aria-expanded="false" aria-controls="w-2-q-1a">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-1a">
+            <div class="card card-body">
+              Zajrzyj do zakładki "Datanodes"
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 1b -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1b. Gdzie można sprawdzić dane w filesystemie?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-1b" aria-expanded="false" aria-controls="w-2-q-1b">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-1b">
+            <div class="card card-body">
+              Jest przeglądarka filesystemu - Utilites -> "browse the file system"
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>      
+      
+      <!-- pytanie 1c -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1c. Odwiedź adres <code>http://&lt;master_public_dns&gt;:50070/jmx</code>
+          </h5>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 1d -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1d. Jakie statystyki są dostępne w interfejsie JMX ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-1d" aria-expanded="false" aria-controls="w-2-q-1d">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-1d">
+            <div class="card card-body">
+              Dostępne są np. statystyki filesystemu: org.apache.hadoop.hdfs.server.namenode.FSNamesystem
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>    
+
+
+      <div class="row mb-4">
+        <div class="col align-self-center">
+       
+        <div class="alert alert-primary d-flex align-items-center" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+          <div>
+            Aby swobodnie korzystać z tych kolejnych poleceń, zmień użytkownika na konto <i>hdfs</i>:<br/>
+            <pre><code class="language-shell">$ sudo su - hdfs</code></pre>
+          </div>
+        </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie 2 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            2. W jakim katalogu przechowywany jest fsimage na NameNode ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-2" aria-expanded="false" aria-controls="w-2-q-2">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-2">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ ls -al /mnt/namenode/current</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>  
+
+      <!-- pytanie 3 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            3. Zapoznaj się z poleceniami. Co dzięki nim możesz zrobić?
+          </h5>
+          <strong>3a.</strong> <pre><code class="language-shell">$ hdfs dfs</code></pre>
+          <strong>3b.</strong> <pre><code class="language-shell">$ hdfs fsck</code></pre>
+          <strong>3c.</strong> <pre><code class="language-shell">$ hdfs dfsadmin</code></pre>
+          <strong>3d.</strong> <pre><code class="language-shell">$ hdfs haadmin</code></pre>
+        </div>
+        <p></p>
+        <hr>
+      </div>  
+
+
+      <!-- pytanie 4a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4a. Sprawdź ile aktualnie zajmuje cały filesystem HDFS ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-4a" aria-expanded="false" aria-controls="w-2-q-4a">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-4a">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -du -h -s /</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>  
+
+
+      <!-- pytanie 4b -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4b. Sprawdź ile jest wszystkich plików w HDFS?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-4b" aria-expanded="false" aria-controls="w-2-q-4b">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-4b">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -count /</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+      <!-- pytanie 4c -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4c. Gdzie można znaleźć jeszcze informacje otrzymane z punktów 4a oraz 4b?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-4c" aria-expanded="false" aria-controls="w-2-q-4c">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-4c">
+            <div class="card card-body">
+              <ul>
+                <li>konsola webowa NameNode (tutaj jest informacje tylko o sumie plikówi i folderów; nie ma info tylko o plikach)</li>
+                <li>interfejs JMX</li>
+                <li>export FSImage</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+      <!-- pytanie 5 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            5. Utwórz lokalnie katalog z kilkoma plikami z randomową treścią. Skopiuj go na HDFS do dowolnego katalogu (np. /user/hadoop/)
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-5" aria-expanded="false" aria-controls="w-2-q-5">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-5">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ cd /tmp
+$ for i in `seq 1 20`; do cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10000 | head -n 1 > example_file_$i; done
+$ hdfs dfs -ls /user/hadoop
+$ hdfs dfs -put ./example_file_* /user/hadoop/
+$ hdfs dfs -ls /user/hadoop</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+      <!-- pytanie 6 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            6. Zmień replikację wszystkich utworzonych w punkcie 5 plików na 10
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-6" aria-expanded="false" aria-controls="w-2-q-6">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-6">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -setrep -R 10 /user/hadoop/*
+$ hdfs dfs -ls /user/hadoop/* </code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+      <!-- pytanie 7 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            7. Odczytaj zawartość uprzednio skopiownaych plików bezpośrednio z HDFS
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-7" aria-expanded="false" aria-controls="w-2-q-7">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-7">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -cat /user/hadoop/example_file_1
+$ hdfs dfs -text /user/hadoop/example_file_1 </code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+
+      <!-- pytanie 8 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            8. Skopiuj katalog z uprzednio przekopiowanymi plikami na HDFS do lokalnego katalogu na serwerze /tmp/data_from_hdfs
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-8" aria-expanded="false" aria-controls="w-2-q-8">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-8">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ mkdir /tmp/data_from_hdfs
+$ hdfs dfs -get /user/hadoop/* /tmp/data_from_hdfs
+$ ls -al /tmp/data_from_hdfs</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+
+      <!-- pytanie 9 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            9. Usuń wszystkie pliki z HDFS, które utworzone zostały w poprzednich krokach
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-9" aria-expanded="false" aria-controls="w-2-q-9">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-9">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -rm -r -skipTrash /user/hadoop/example_file_*</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+      <div class="row">
+        <div class="col align-self-center">
+          <h2>YARN</h2>
+          <br/>
+        </div>
+      </div>
+
+      <!-- pytanie y1 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1. Zapoznaj się z interfejsem WWW ResourceManagera
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-y1" aria-expanded="false" aria-controls="w-2-q-y1">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-y1">
+            <div class="card card-body">
+              Odwiedź adres: <code>http://&lt;master_public_dns&gt;:8088</code><br/>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+      
+
+      <!-- pytanie y1a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1a. Gdzie są informacje o nodemanagerach?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-y1a" aria-expanded="false" aria-controls="w-2-q-y1a">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-y1a">
+            <div class="card card-body">
+              Zajrzyj do zakładki "Nodes"
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie y1b -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1b. Odwiedź adres <code>http://&lt;master_public_dns&gt;:8088/jmx</code>
+          </h5>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie y1c -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1c. Jakie statystyki są dostępne w interfejsie JMX ?
+          </h5>
+        </div>
+        <hr>
+      </div>   
+
+      <!-- pytanie y1d -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1d. Odwiedź adres <code>http://&lt;master_public_dns&gt;:8088/conf</code>
+          </h5>
+          <p>Jest tutaj zawarta cała konfiguracja o tym z jakimi parametrami jest uruchomiony proces - najczęściej jest to cała konfiguracja dla klastra Hadoopa</p>
+        </div>
+        <hr>
+      </div>
+
+      <!-- pytanie y1e -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            1e. Gdzie można sprawdzić informacje o schedulerze ?
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-y1e" aria-expanded="false" aria-controls="w-2-q-y1e">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-y1e">
+            <div class="card card-body">
+              Zajrzyj do zakładki "Scheduler"
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+
+
+      <!-- pytanie y2 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            2. Zapoznaj się z poleceniami. Co dzięki nim możesz zrobić?
+          </h5>
+          <strong>2a.</strong> <pre><code class="language-shell">$ yarn application</code></pre>
+          <strong>2b.</strong> <pre><code class="language-shell">$ yarn jar</code></pre>
+          <strong>2c.</strong> <pre><code class="language-shell">$ yarn logs</code></pre>
+          <strong>2d.</strong> <pre><code class="language-shell">$ yarn queue</code></pre>
+          <strong>2e.</strong> <pre><code class="language-shell">$ yarn rmadmin</code></pre>
+        </div>
+        <p></p>
+        <hr>
+      </div>  
+
+      <!-- pytanie y3 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            3. Zapoznaj się z poleceniem:
+          </h5>
+          <pre><code class="language-shell">$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar</code></pre>
+        </div>
+        <p></p>
+        <hr>
+      </div>  
+
+
+      <!-- pytanie y4 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4. Uruchom przykładową aplikacje obliczająca Pi metodą quasi monte carlo.
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-y4" aria-expanded="false" aria-controls="w-2-q-y4">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-y4">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar pi 10 1000</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+
+      <!-- pytanie y4a -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4a. Zwróć uwagę na to co się dzieje w ResourceManager podczas działania aplikacji Pi
+          </h5>
+        </div>
+        <p></p>
+        <hr>
+      </div>   
+
+
+      <!-- pytanie y4b -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            4b. Pobierz oraz zapoznaj się z logami ukończonej aplikacji.
+          </h5>
+          <pre><code class="language-shell">$ yarn logs -applicationId application_&lt;XXX&gt;_&lt;XXX&gt;</code></pre>
+        </div>
+        <p></p>
+        <hr>
+      </div>  
+
+
+      <!-- pytanie y5 -->
+      <div class="row mb-4">
+        <div class="col align-self-center">
+          <h5>
+            5. Uruchom program wordCount na pliku pan_tadeusz.txt. Plik znajduje się w lokalizacji <code>s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt</code>
+          </h5>
+          <p>
+            <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-2-q-y5" aria-expanded="false" aria-controls="w-2-q-y5">
+              Pokaż odpowiedź
+            </button>
+          </p>
+          <div class="collapse" id="w-2-q-y5">
+            <div class="card card-body">
+              <pre><code class="language-shell">$ hdfs dfs -mkdir /user/hadoop/pan_tadeusz
+$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt /user/hadoop/pan_tadeusz
+$ hdfs dfs -ls /user/hadoop/pan_tadeusz
+$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount
+$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount /user/hadoop/pan_tadeusz /user/hadoop/pan_tadeusz_wordcount
+$ hdfs dfs -text /user/hadoop/pan_tadeusz_wordcount/* | sort | uniq | sort -k2 -n</code></pre>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div> 
+
+    </div>
+  </body>
+</html>
