@@ -45,10 +45,10 @@
 
 - Databricks (free trial)
 - Cloudera / Hortonworks [https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html](https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html)
-  - Google Cloud Platform (DataProc)
-  - Amazon Web Services (EMR)
-  - Microsoft Azure (HDInsight)
-  - [Docker Hub](hub.docker.com)
+- Google Cloud Platform (DataProc)
+- Amazon Web Services (EMR)
+- Microsoft Azure (HDInsight)
+- [Docker Hub](hub.docker.com)
 
 ### Inne / dodatkowe źródła
 
