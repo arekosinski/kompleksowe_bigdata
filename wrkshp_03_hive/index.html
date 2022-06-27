@@ -159,7 +159,8 @@ $ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt /u
           </p>
           <div class="collapse" id="w-3-q-2">
             <div class="card card-body">
-              <pre><code class="language-sql">select count(*) from pan_tadeusz; -- 10824</code></pre>
+              <pre><code class="language-sql">select count(*) from pan_tadeusz;
+--10824</code></pre>
             </div>
           </div>
         </div>
@@ -307,6 +308,7 @@ LOCATION 'hdfs:///user/hadoop/users';
     `accountid` bigint)
 STORED AS TEXTFILE
 LOCATION 's3://kompleksowe-szkolenie-bigdata/stackoverflow/users';
+
 insert overwrite table users select * from users_temporary ;</code></pre>
                 </div>
                 </div>
@@ -355,7 +357,7 @@ insert overwrite table users select * from users_temporary ;</code></pre>
             <div class="alert alert-primary d-flex align-items-center" role="alert">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
                 <div>
-                    W miejscu gdzie pojawiają się wyniki, po prawej stronie jest mała ikonka wykresu.
+                    W miejscu gdzie pojawiają się wyniki, po lewej stronie jest mała ikonka wykresu.
                 </div>
             </div>
         </div>
@@ -465,7 +467,7 @@ show partitions users_displayname;
         <div class="row mb-4">
             <div class="col align-self-center">
                 <h5>
-                    7c. Odtwórz strukturę tabeli <code>users_displayname</code> za pomocą polecenia MSCK REPAIR TABLE.
+                    7c. Odtwórz strukturę tabeli <code>users_displayname</code> za pomocą polecenia <code>msck repair table</code>.
                 </h5>
                 <p>
                 <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-7c" aria-expanded="false" aria-controls="w-3-q-7c">

@@ -129,7 +129,7 @@ CREATE TABLE `users`(
     `accountid` bigint)
 STORED AS TEXTFILE
 LOCATION 'hdfs:///user/hadoop/users';
-    
+
 CREATE TABLE `users_temporary`(
     `id` bigint,
     `reputation` bigint,
@@ -146,7 +146,7 @@ CREATE TABLE `users_temporary`(
     `accountid` bigint)
 STORED AS TEXTFILE
 LOCATION 's3://kompleksowe-szkolenie-bigdata/stackoverflow/users';
-    
+
 insert overwrite table users select * from users_temporary ;
 </code></pre>
 
@@ -192,7 +192,7 @@ create table users_avro
     location  'hdfs:///user/hadoop/users_avro'
     as
     select * from users;
-                
+
 create table users_orc
     stored as orc
     location  'hdfs:///user/hadoop/users_orc'
@@ -247,10 +247,10 @@ create table users_orc
                 <div class="card card-body">
                     <pre><code class="language-sql">set hive.compute.query.using.stats=false;
 select count(*) from users_avro;
-                        
+
 set hive.compute.query.using.stats=false;
 select count(*) from users_orc;
-                        
+
 set hive.compute.query.using.stats=false;
 select count(*) from users_parquet;</code></pre>
                 </div>
