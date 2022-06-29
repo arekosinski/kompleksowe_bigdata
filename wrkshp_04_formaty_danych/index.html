@@ -77,7 +77,7 @@
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
             <div>
                 Master Public DNS zmienia sie wraz z uruchomieniem klastra - jest dostępny w konsolie AWS.<br/>
-                W momencie kiedy pierwszy raz uruchamiasz konsole Hue, należy utworzyć użytkownika - utwórz usera o nazwie "hadoop"
+                W momencie kiedy pierwszy raz uruchamiasz konsole Hue, należy utworzyć użytkownika - utwórz usera o nazwie "<strong>hadoop</strong>"
             </div>
           </div>
           </div>
@@ -219,7 +219,7 @@ create table users_orc
                 </p>
                 <div class="collapse" id="w-4-q-3">
                 <div class="card card-body">
-                    <pre><code class="language-shell">$ hdfs dfs -du -h /user/hadoop/</code></pre>
+                    <pre><code class="language-shell">$ hdfs dfs -du -h hdfs:///user/hadoop/</code></pre>
                 </div>
                 </div>
             </div>

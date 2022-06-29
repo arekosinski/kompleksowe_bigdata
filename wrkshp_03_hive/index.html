@@ -77,7 +77,7 @@
             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
             <div>
                 Master Public DNS zmienia sie wraz z uruchomieniem klastra - jest dostępny w konsolie AWS.<br/>
-                W momencie kiedy pierwszy raz uruchamiasz konsole Hue, należy utworzyć użytkownika - utwórz usera o nazwie "hadoop"
+                W momencie kiedy pierwszy raz uruchamiasz konsole Hue, należy utworzyć użytkownika - utwórz usera o nazwie <strong>"hadoop"</strong>
             </div>
           </div>
           </div>
@@ -120,9 +120,9 @@
             <div class="alert alert-primary d-flex align-items-center" role="alert">
                 <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
                 <div>
-                    Skopiuj dane z S3 w ten sposób za pomocą CLI:<br/>
-                    <pre><code class="language-shell">$ hdfs dfs -mkdir /user/hadoop/pan_tadeusz
-$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt /user/hadoop/pan_tadeusz</code></pre>
+                    Skopiuj dane z S3 w ten sposób za pomocą CLI jako użytkownik <strong>hadoop</strong>:<br/>
+                    <pre><code class="language-shell">$ hdfs dfs -mkdir hdfs:///user/hadoop/pan_tadeusz
+$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt hdfs:///user/hadoop/pan_tadeusz</code></pre>
 
                 </div>
               </div>
@@ -389,9 +389,21 @@ insert overwrite table users select * from users_temporary ;</code></pre>
             </p>
             <div class="collapse" id="w-3-q-7">
             <div class="card card-body">
-                <pre><code class="language-sql">set hive.exec.dynamic.partition.mode=nonstrict;
-set hive.exec.max.dynamic.partitions=10000;
-set hive.exec.max.dynamic.partitions.pernode=10000;
+                    <pre><code class="language-sql">set hive.exec.dynamic.partition.mode=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+-- kolumna partycjonująca tabeli docelowej musi być podana jako ostatnia w klauzuli SELECT
+insert into users_displayname partition (first_digit)
+  select
+    displayname,
+    substr(CAST(id as string), 1, 1) as first_digit
+  from users
+  where
+    displayname is not null
+    and id is not null
+    and (cast(id as string) like '1%' OR cast(id as string) like '2%');
+                      </code></pre><br/>
+                      <p>Możemy również bezpośrednio wskazać do której partycji chcemy załadować dane:</p>
+                      <pre><code class="language-sql">
 create external table users_displayname
     (displayname string)
     partitioned by (first_digit string);
@@ -411,7 +423,8 @@ insert into users_displayname partition (first_digit="2")
     where displayname is not null
         and id is not null
         and cast(id as string) like '2%';
-                    </code></pre>
+                        </code></pre>
+                        
             </div>
             </div>
         </div>

@@ -278,7 +278,7 @@
           </p>
           <div class="collapse" id="w-2-q-4a">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -du -h -s /</code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -du -h -s hdfs:///</code></pre>
             </div>
           </div>
         </div>
@@ -299,7 +299,7 @@
           </p>
           <div class="collapse" id="w-2-q-4b">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -count /</code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -count hdfs:///</code></pre>
             </div>
           </div>
         </div>
@@ -345,9 +345,9 @@
             <div class="card card-body">
               <pre><code class="language-shell">$ cd /tmp
 $ for i in `seq 1 20`; do cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10000 | head -n 1 > example_file_$i; done
-$ hdfs dfs -ls /user/hadoop
-$ hdfs dfs -put ./example_file_* /user/hadoop/
-$ hdfs dfs -ls /user/hadoop</code></pre>
+$ hdfs dfs -ls hdfs:///user/hadoop
+$ hdfs dfs -put ./example_file_* hdfs:///user/hadoop/
+$ hdfs dfs -ls hdfs:///user/hadoop</code></pre>
             </div>
           </div>
         </div>
@@ -367,8 +367,8 @@ $ hdfs dfs -ls /user/hadoop</code></pre>
           </p>
           <div class="collapse" id="w-2-q-6">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -setrep -R 10 /user/hadoop/*
-$ hdfs dfs -ls /user/hadoop/* </code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -setrep -R 10 hdfs:///user/hadoop/*
+$ hdfs dfs -ls hdfs:///user/hadoop/* </code></pre>
             </div>
           </div>
         </div>
@@ -388,8 +388,8 @@ $ hdfs dfs -ls /user/hadoop/* </code></pre>
           </p>
           <div class="collapse" id="w-2-q-7">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -cat /user/hadoop/example_file_1
-$ hdfs dfs -text /user/hadoop/example_file_1 </code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -cat hdfs:///user/hadoop/example_file_1
+$ hdfs dfs -text hdfs:///user/hadoop/example_file_1 </code></pre>
             </div>
           </div>
         </div>
@@ -411,7 +411,7 @@ $ hdfs dfs -text /user/hadoop/example_file_1 </code></pre>
           <div class="collapse" id="w-2-q-8">
             <div class="card card-body">
               <pre><code class="language-shell">$ mkdir /tmp/data_from_hdfs
-$ hdfs dfs -get /user/hadoop/* /tmp/data_from_hdfs
+$ hdfs dfs -get hdfs:///user/hadoop/* /tmp/data_from_hdfs
 $ ls -al /tmp/data_from_hdfs</code></pre>
             </div>
           </div>
@@ -433,7 +433,7 @@ $ ls -al /tmp/data_from_hdfs</code></pre>
           </p>
           <div class="collapse" id="w-2-q-9">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -rm -r -skipTrash /user/hadoop/example_file_*</code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -rm -r -skipTrash hdfs:///user/hadoop/example_file_*</code></pre>
             </div>
           </div>
         </div>
@@ -628,12 +628,12 @@ $ ls -al /tmp/data_from_hdfs</code></pre>
           </p>
           <div class="collapse" id="w-2-q-y5">
             <div class="card card-body">
-              <pre><code class="language-shell">$ hdfs dfs -mkdir /user/hadoop/pan_tadeusz
-$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt /user/hadoop/pan_tadeusz
-$ hdfs dfs -ls /user/hadoop/pan_tadeusz
-$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount
-$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount /user/hadoop/pan_tadeusz /user/hadoop/pan_tadeusz_wordcount
-$ hdfs dfs -text /user/hadoop/pan_tadeusz_wordcount/* | sort | uniq | sort -k2 -n</code></pre>
+              <pre><code class="language-shell">$ hdfs dfs -mkdir hdfs:///user/hadoop/pan_tadeusz # tworzenie katalogu na hdfs 
+$ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt hdfs:///user/hadoop/pan_tadeusz # improt danych z S3 do HDFS
+$ hdfs dfs -ls hdfs:///user/hadoop/pan_tadeusz # sprawdźmy czy dane się pojawiły
+$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount # sprawdźmy jak wyglądają parametry programu 
+$ yarn jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount hdfs:///user/hadoop/pan_tadeusz hdfs:///user/hadoop/pan_tadeusz_wordcount # uruchamiamy przetwarzania
+$ hdfs dfs -text hdfs:///user/hadoop/pan_tadeusz_wordcount/* | sort | uniq | sort -k2 -n # zbieramy wynik i sortujemy</code></pre> 
             </div>
           </div>
         </div>
