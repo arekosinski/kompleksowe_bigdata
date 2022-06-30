@@ -391,6 +391,11 @@ insert overwrite table users select * from users_temporary ;</code></pre>
             <div class="card card-body">
                     <pre><code class="language-sql">set hive.exec.dynamic.partition.mode=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
+
+create external table users_displayname
+    (displayname string)
+    partitioned by (first_digit string);
+
 -- kolumna partycjonująca tabeli docelowej musi być podana jako ostatnia w klauzuli SELECT
 insert into users_displayname partition (first_digit)
   select
