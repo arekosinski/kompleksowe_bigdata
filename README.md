@@ -56,7 +56,3 @@
 - [StackOverflow Dev Survey](https://insights.stackoverflow.com/survey/2021)
 - Thoughtworks Technology Radar
 
---------------------
-Dziękuję za udział w szkoleniu :)\
-Arek Osiński\
-Kontakt: arek.osinski(at)i-netpl.info
