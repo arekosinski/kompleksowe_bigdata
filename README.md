@@ -48,11 +48,10 @@
 - Google Cloud Platform (DataProc)
 - Amazon Web Services (EMR)
 - Microsoft Azure (HDInsight)
-- [Docker Hub](hub.docker.com)
+- [Docker Hub](https://hub.docker.com)
 
 ### Inne / dodatkowe źródła
 
 - Gartner
 - [StackOverflow Dev Survey](https://insights.stackoverflow.com/survey/2021)
 - Thoughtworks Technology Radar
-
