@@ -388,6 +388,12 @@ insert overwrite table users select * from users_temporary ;</code></pre>
             </button>
             </p>
             <div class="collapse" id="w-3-q-7">
+              <div class="alert alert-primary d-flex align-items-center" role="alert">
+                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                <div>
+                  Przy korzystaniu z dynamicznego partycjonowania oraz konstrukcji <code>INSERT INTO AS SELECT</code>, kolumna partycjonująca (<code>first_digit</code>) musi być podana jako ostatnia w <code>SELECT</code>
+                </div>
+            </div>
             <div class="card card-body">
                     <pre><code class="language-sql">set hive.exec.dynamic.partition.mode=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
@@ -396,7 +402,6 @@ create external table users_displayname
     (displayname string)
     partitioned by (first_digit string);
 
--- kolumna partycjonująca tabeli docelowej musi być podana jako ostatnia w klauzuli SELECT
 insert into users_displayname partition (first_digit)
   select
     displayname,
@@ -408,6 +413,7 @@ insert into users_displayname partition (first_digit)
     and (cast(id as string) like '1%' OR cast(id as string) like '2%');
                       </code></pre><br/>
                       <p>Możemy również bezpośrednio wskazać do której partycji chcemy załadować dane:</p>
+                      
                       <pre><code class="language-sql">
 create external table users_displayname
     (displayname string)
