@@ -53,5 +53,5 @@
 ### Inne / dodatkowe źródła
 
 - Gartner
-- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2022/)
+- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2023/)
 - Thoughtworks Technology Radar
