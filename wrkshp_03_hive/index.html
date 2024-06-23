@@ -167,34 +167,11 @@ $ hdfs dfs -cp s3://kompleksowe-szkolenie-bigdata/warsztat_02/pan_tadeusz.txt hd
         <hr>
       </div>  
 
-
-        <!-- pytanie 2a -->
-        <div class="row mb-4">
-            <div class="col align-self-center">
-                <h5>
-                    2a. Wykonaj polecenie SQL z punktu 2 za pomocą silnika MapReduce
-                </h5>
-                <p>
-                <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-2a" aria-expanded="false" aria-controls="w-3-q-2a">
-                    Pokaż odpowiedź
-                </button>
-                </p>
-                <div class="collapse" id="w-3-q-2a">
-                <div class="card card-body">
-                    <pre><code class="language-sql">set hive.execution.engine=mr;
-select count(*) from pan_tadeusz;</code></pre>
-                </div>
-                </div>
-            </div>
-            <hr>
-        </div>  
-
-
         <!-- pytanie 3 -->
         <div class="row mb-4">
             <div class="col align-self-center">
                 <h5>
-                    3. Ile unikalnych wyrazów zbiór posiada ? (przełącz się na silnik TEZ)
+                    3. Ile unikalnych wyrazów zbiór posiada ?
                 </h5>
                 <p>
                 <button class="btn btn-secondary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#w-3-q-3" aria-expanded="false" aria-controls="w-3-q-3">

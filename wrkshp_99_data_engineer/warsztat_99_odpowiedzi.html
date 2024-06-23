@@ -12498,7 +12498,7 @@ div#notebook {
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Przygotowanie środowiska:</p>
-<p>Zaloguj się na maszynę master i utwórz bazę danych oraz użytkownika za pomocą takiego polecenia:</p>
+<p>Zaloguj się na maszynę master i utwórz bazę danych oraz użytkownika wraz z hasłem za pomocą takiego polecenia:</p>
 
 <pre><code>sudo mysql -e "GRANT ALL PRIVILEGES ON test.* TO 'sqoop'@'%' IDENTIFIED BY 'export2';"</code></pre>
 <pre><code>sudo mysql -e "create database test"</code></pre>
@@ -12511,7 +12511,8 @@ div#notebook {
 <b>UWAGA: Wymagane będzie uprzednie utworzenie tabeli docelowej w systemie mysql (tabeli do której będziemy eksportować dane z Hive).</b></p>
 <p>Jak się zalogować do mysql? (robimy to w ramach połączenia SSH do serwera typu master)</p>
 
-<pre><code>mysql -u sqoop -p -h &lt;adres_ip&gt;</code></pre>
+<!-- <pre><code>mysql -u sqoop -p -h &lt;adres_ip&gt;</code></pre> -->
+ <pre><code>mysql -u sqoop -p -h `hostname -i`</code></pre>
 
 <div>Do eksportu danych do bazy MySql skorzystaj z notebooka Jupyterowego dołącznego do warsztatu - warsztat_99_spark_mysql_jdbc.ipynb</div>
 
