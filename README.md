@@ -5,11 +5,10 @@
 
 - szkolenia
 - konferencje
-- bardzo często przy konferencjach BigData są również prowadzone warsztaty i szkolenia
+  - bardzo często przy konferencjach BigData są również prowadzone warsztaty i szkolenia
 - największe konferencje
   - [Big Data Tech Summit](https://bigdatatechwarsaw.eu/) (Warszawa)
   - [PyData](https://pydata.org/)
-  - [Big Things Spain](https://www.bigthingsconference.com/)
   - [Crunch Conference](https://crunchconf.com/)
   - [InfoShare](https://infoshare.pl/) (Gdańsk)
   - [Big Data LDN](https://bigdataldn.com/)
@@ -25,16 +24,13 @@
   - Airbnb
   - Twitter
   - Booking
-  - Zalando
   - wiele, wiele innych :)
 - [MeetUp](https://www.meetup.com/)
-- Java User Groups
 - studia podyplomowe
 
 ### Kursy online
 
 - [Udemy](http://udemy.com)
-- [EDx](http://edx.com)
 - [openuniversity](http://www.openuniversity.edu)
 - [Coursera](https://www.coursera.org/)
 - [Kaggle](https://www.kaggle.com/)
@@ -43,8 +39,9 @@
 
 ### Wirtualki / środowiska / jak się uruchomić ?
 
-- Databricks (free trial)
-- Cloudera / Hortonworks [https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html](https://www.cloudera.com/downloads/hortonworks-sandbox/hdp.html)
+- [Hadoop: Setting up a Single Node Cluster (official docs)](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
+- Databricks (trial)
+- Cloudera / Hortonworks (opcje na trial)
 - Google Cloud Platform (DataProc)
 - Amazon Web Services (EMR)
 - Microsoft Azure (HDInsight)
@@ -52,6 +49,6 @@
 
 ### Inne / dodatkowe źródła
 
-- Gartner
-- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2023/)
+- Gartner Magic Quadrants
+- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2024/)
 - Thoughtworks Technology Radar
