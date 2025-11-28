@@ -9,10 +9,9 @@
 - największe konferencje
   - [Big Data Tech Summit](https://bigdatatechwarsaw.eu/) (Warszawa)
   - [PyData](https://pydata.org/)
-  - [Crunch Conference](https://crunchconf.com/)
   - [InfoShare](https://infoshare.pl/) (Gdańsk)
   - [Big Data LDN](https://bigdataldn.com/)
-  - [Data Mass](http://summit.datamass.io/) (Gdańsk)
+  - Data Mass (w ramach InfoShare)
   - [Data Council](https://www.datacouncil.ai/)
   - konferencje również online:
     - Google Next / Google Cloud on air
@@ -50,5 +49,5 @@
 ### Inne / dodatkowe źródła
 
 - Gartner Magic Quadrants
-- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2024/)
+- [StackOverflow Dev Survey](https://survey.stackoverflow.co/2025)
 - Thoughtworks Technology Radar
